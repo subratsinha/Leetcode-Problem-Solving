@@ -1,0 +1,97 @@
+You are given the head of a linked list, and an integer k.
+
+Return the head of the linked list after swapping the values of the kth node from the beginning and the kth node from the end (the list is 1-indexed).
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], k = 2
+Output: [1,4,3,2,5]
+Example 2:
+
+Input: head = [7,9,6,6,7,8,3,0,9,5], k = 5
+Output: [7,9,6,6,8,7,3,0,9,5]
+ 
+
+Constraints:
+
+The number of nodes in the list is n.
+1 <= k <= n <= 105
+0 <= Node.val <= 100
+
+
+////////////////////////////////////////////////////////////////////////// SOLUTION ///////////////////////////////////////////////////////////////////////////////////////
+
+
+class Solution {
+public:
+    int findLen(ListNode *head){
+        int len=0;
+        while(head){
+            len++;
+            head=head->next;
+        }
+        return len;
+    }
+    
+    ListNode* swapNodes(ListNode* head, int k) {
+        int n=findLen(head);  
+		
+        
+		if((2*k-1)==n)
+        {
+            return head;
+        }
+        
+        ListNode *x=head;
+        ListNode *x_prev=NULL;  
+        int cnt=k-1; 
+        while(cnt--)
+        {
+            x_prev=x;
+            x=x->next;
+        }
+        
+
+        ListNode *y=head;
+        ListNode *y_prev=NULL;
+        cnt=n-k;
+        while(cnt--)
+        {
+            y_prev=y;
+            y=y->next;
+        }
+        
+        if(x_prev)
+        {
+            x_prev->next=y;
+        }
+        
+        if(y_prev)
+        {
+            y_prev->next=x;
+        }
+       
+        ListNode *t=x->next;
+        x->next=y->next;
+        y->next=t;
+        
+        
+        if(k==1)
+        {
+            return y;
+        }
+
+        
+
+        if(k==n)
+        {
+            return x;
+        }
+        return head;
+        
+        
+    }
+};
