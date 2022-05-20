@@ -5,6 +5,7 @@ Implement the Underground  System class:
 void checkIn(int id, string stationName, int t)
 A customer with a card ID equal to id, checks in at the station stationName at time t.
 A customer can only be checked into one place at a time.
+
 void checkOut(int id, string stationName, int t)
 A customer with a card ID equal to id, checks out from the station stationName at time t.
 double getAverageTime(string startStation, string endStation)
