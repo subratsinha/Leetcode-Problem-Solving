@@ -1,0 +1,55 @@
+There is an m x n grid with a ball. The ball is initially at the position [startRow, startColumn]. You are allowed to move the ball to one of the four adjacent cells in the grid (possibly out of the grid crossing the grid boundary). You can apply at most maxMove moves to the ball.
+
+Given the five integers m, n, maxMove, startRow, startColumn, return the number of paths to move the ball out of the grid boundary. Since the answer can be very large, return it modulo 109 + 7.
+
+ 
+
+Example 1:
+
+
+Input: m = 2, n = 2, maxMove = 2, startRow = 0, startColumn = 0
+Output: 6
+Example 2:
+
+
+Input: m = 1, n = 3, maxMove = 3, startRow = 0, startColumn = 1
+Output: 12
+
+
+///////////////////////////////////////////////////////////////////////////// SOLUTION ///////////////////////////////////////////////////////////////////////////////////
+
+
+class Solution {
+public:
+    int dp[51][51][52];
+    int mod = 1e9+7;
+    
+    int countPath(int &m,int &n,int x, int r,int c)
+    {
+        
+        if(r==m || c==n || r<0 || c<0)
+            return 1; 
+        
+        if(x==0)
+            return 0; 
+        
+        int ans =0;
+        
+        if(dp[r][c][x]!=-1)
+            return dp[r][c][x];
+        
+        ans = ( ans + countPath(m,n,x-1,r-1,c)) % mod; 
+        ans = ( ans + countPath(m,n,x-1,r+1,c)) % mod; 
+        ans = ( ans + countPath(m,n,x-1,r,c+1)) % mod; 
+        ans = ( ans + countPath(m,n,x-1,r,c-1)) % mod;
+        
+        return dp[r][c][x] = ans;
+    }
+    
+    
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) 
+    {
+        memset(dp,-1,sizeof(dp));
+        return countPath(m,n,maxMove,startRow,startColumn);
+    }
+};
