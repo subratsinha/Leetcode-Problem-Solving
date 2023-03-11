@@ -1,0 +1,51 @@
+Given the head of a singly linked list where elements are sorted in ascending order, convert it to a 
+height-balanced
+ binary search tree.
+
+ 
+
+Example 1:
+
+
+Input: head = [-10,-3,0,5,9]
+Output: [0,-3,9,-10,null,5]
+Explanation: One possible answer is [0,-3,9,-10,null,5], which represents the shown height balanced BST.
+Example 2:
+
+Input: head = []
+Output: []
+
+
+///////////////////////////////////////////////////////////////////////////////// SOLUTION ///////////////////////////////////////////////////////////////////////////////
+
+
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        
+        vector<int> v;
+        while(head)
+        {
+            v.push_back(head->val);
+            head=head->next;
+        }
+
+        return bst(v,0,v.size()-1);
+    }
+
+    TreeNode* bst(vector<int> v, int left, int right)
+    {
+        if(left > right)
+        {
+            return NULL;
+        }
+
+        int mid = left + (right - left)/2;
+
+        TreeNode* root = new TreeNode(v[mid]);
+        root->left = bst(v,left,mid-1);
+        root->right = bst(v,mid+1,right);
+
+        return root;
+    }
+};
