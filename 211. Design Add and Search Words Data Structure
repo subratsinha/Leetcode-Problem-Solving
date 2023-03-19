@@ -1,0 +1,106 @@
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the WordDictionary class:
+
+WordDictionary() Initializes the object.
+void addWord(word) Adds word to the data structure, it can be matched later.
+bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' where dots can be matched with any letter.
+ 
+
+Example:
+
+Input
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+Output
+[null,null,null,null,false,true,true,true]
+
+Explanation
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True
+ 
+
+Constraints:
+
+1 <= word.length <= 25
+word in addWord consists of lowercase English letters.
+word in search consist of '.' or lowercase English letters.
+There will be at most 3 dots in word for search queries.
+At most 104 calls will be made to addWord and search.
+
+
+////////////////////////////////////////////////////////////////////////////// SOLUTION ///////////////////////////////////////////////////////////////////////////////
+
+struct Node{
+    Node *link[26];
+    bool flag=false;
+
+    bool containsKey(char c){
+        return (link[c-97]!=NULL);
+    }
+
+    void createTrie(char c){
+        link[c-97]=new Node();
+    }
+
+    Node *getKey(char c){
+        return link[c-97];
+    }
+
+    void setEnd(){
+        flag=true;
+    }
+};
+
+class WordDictionary {
+private:
+    Node *root;
+
+    bool tryToFindWord(int i, string &word, Node* node){
+        if(i>=word.size()) return node->flag;
+
+        bool ans=false;
+        if(word[i]=='.'){
+            for(int k=0; k<26; k++){
+                if(node->link[k]){
+                    ans|=tryToFindWord(i+1,word,node->link[k]);       
+                }
+            }   
+        }else{
+            if(!node->containsKey(word[i])) return false;
+            node=node->getKey(word[i]);
+            ans=tryToFindWord(i+1,word,node);
+        }
+
+        return ans;
+    }
+
+public:
+    WordDictionary() {
+        root=new Node();
+    }
+    
+    void addWord(string word) {
+        Node *node=root;
+        for(int i=0; i<word.size(); i++){
+            if(!node->containsKey(word[i])){
+                node->createTrie(word[i]);
+            }
+            node=node->getKey(word[i]);
+        }
+        node->setEnd();
+    }
+    
+    bool search(string word) {
+        Node *node=root;
+        return tryToFindWord(0,word,node);
+    }
+};
+
+// Please Upvote if it helps you..
